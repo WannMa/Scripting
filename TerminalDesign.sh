@@ -1,6 +1,6 @@
 #!/bin/ksh
 
-  Design_Menue(){
+  Design_Table(){
 #
 #***#   Display Parameters    #***#
 typeset inner_column_seperator="\u002B"   #==> Standard: \u002B | Unicode for plus (+)
@@ -229,8 +229,8 @@ typeset -i _counter_params=$#
 ### ==> MAIN
 
 ###--> Usage:
-Design_Menue "COLUMN" "Column1" "Column2" "Column3" "Column4"
-Design_Menue "ROW" "ROW1" "ROW2" "ROW3" "ROW4"
-Design_Menue "ROW" "ROW5" "ROW6" "ROW7" "ROW8"
-Design_Menue "ROW" "ROW9" "ROW10" "ROW11" "ROW12"
-Design_Menue "PRINT"
+Design_Table "COLUMN" "Column1" "Column2" "Column3" "Column4"
+Design_Table "ROW" "ROW1" "ROW2" "ROW3" "ROW4"
+Design_Table "ROW" "ROW5" "ROW6" "ROW7" "ROW8"
+Design_Table "ROW" "ROW9" "ROW10" "ROW11" "ROW12"
+Design_Table "PRINT"
