@@ -2,16 +2,28 @@
 
 contains dynamic/customizable design procedures for continuous flow structure and consistent alignment.
 
-:+ Improves readability | 
------------- | 
++Improves readability 🔖 | +satisfies obsessive organizers 🤣
+------------ | ------------ | 
 
+## Start
+Procedure prints starting point of structure
 
 ## Table
+Procedure prints out columns & rows with automatic content size adaption and perfect alignment.
 
-Procedure for printing out tables with automatic content size adaption.
+## End
+Procedure prints ending point of structure
+
+---
 
 ### Getting Started
 
+#### Start
+```shell
+Design_Start   # Start
+```
+
+#### Table
 1. First specify as many columns you'd like, right after the "COLUMN" parameter.
 ```shell
 Design_Table "COLUMN" "ColumnHead1" "ColumnHead2" "ColumnHead3" "ColumnHead4"   # 4xColumns
@@ -26,14 +38,21 @@ Design_Table "ROW" "Row2Col1" "Row2Col2" "Row2Col3" "Row2Col4"    # Row Number 2
 Design_Table "PRINT"    # takes all predecessors rows and columns and prints
 ```
 
-### Example Output:
-
-![](https://i.imgur.com/6KXaDqU.png)
+#### End
 ```shell
+Design_End   # End
+```
+
+## Example Output:
+
+![](https://i.imgur.com/JfjZHpF.png)
+```shell
+Design_Start
 Design_Table "COLUMN" "ColumnHead1" "ColumnHead2" "ColumnHead3" "ColumnHead4"
 Design_Table "ROW" "Row1Col1" "Row1Col2" "Row1Col3" "Row1Col4"
 Design_Table "ROW" "Row2Col1" "Row2Col2" "Row2Col3" "Row2Col4"
 Design_Table "PRINT"
+Design_End
 ```
 
 ---
