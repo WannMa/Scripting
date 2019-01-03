@@ -1,5 +1,34 @@
 #!/bin/ksh
 
+#***# Design Variables #***#
+
+LEFT_OUTER_CORNER_U="\u250F"      # --> ┏ 
+LEFT_OUTER_CORNER_D="\u2517"
+LEFT_OUTER_VERT_LINE="\u2503"     # --> ┃ 
+LEFT_OUTER_MID_LINE="\u2523"      # --> ┣ 
+
+MID_INNER_DASH="\u2501"           # --> ━
+MID_INNER_ODASH="\u2919"          # --> ⤙
+
+RIGHT_INNER_BLOCK="\u25A7"        # --> ▨ 
+RIGHT_INNER_CIRC="\u29BF"         # --> ⦿ 
+
+  Design_Start(){
+#
+  printf "\n ${LEFT_OUTER_CORNER_U}${RIGHT_INNER_BLOCK}"  # --> ▨
+  printf "\n ${LEFT_OUTER_VERT_LINE}"  # --> |
+
+  return 0
+}
+
+  Design_End(){
+#
+  printf " ${LEFT_OUTER_VERT_LINE}"  # --> |
+  printf "\n ${LEFT_OUTER_CORNER_D}${RIGHT_INNER_BLOCK}\n"  # --> ▨
+
+  return 0
+}
+
   Design_Table(){
 #
 #***#   Display Parameters    #***#
@@ -90,8 +119,8 @@ typeset -i _counter_params=$#
         #
         typeset -i width_resize=4
         typeset terminalfull
-        typeset Layout_Line_Full="\n \u2503 $inner_column_seperator" #result full line
-        typeset Layout_Line_Header=" \u2503 $outer_column_seperator" # result header line
+        typeset Layout_Line_Full="\n ${LEFT_OUTER_VERT_LINE} $inner_column_seperator" #result full line
+        typeset Layout_Line_Header=" ${LEFT_OUTER_VERT_LINE} $outer_column_seperator" # result header line
         typeset Layout_Line_Row=""  # result Row line
         #
         typeset x_head_content
@@ -126,9 +155,9 @@ typeset -i _counter_params=$#
           eval "COL${i}_NR_FULL=\${x_full}" # store max of xcol
           ###==> Symbols
           #COL
-          numtochar "$x_width_lr" " "
+          numtochar_ "$x_width_lr" " "
           Layout_Line_Header+="${x_chars}${x_head_content}${x_chars}${outer_column_seperator}"
-          numtochar "$x_full" "$column_delimeter"
+          numtochar_ "$x_full" "$column_delimeter"
           Layout_Line_Full+="${x_chars}${inner_column_seperator}"
           #
           ((width_resize=width_resize+x_full+1))
@@ -141,7 +170,7 @@ typeset -i _counter_params=$#
         for ((i=1;i<=NROFROW;i++))
         do
         #
-        Layout_Line_Row="\n \u2503 $outer_column_seperator"
+        Layout_Line_Row="\n ${LEFT_OUTER_VERT_LINE} $outer_column_seperator"
           for ((j=1;j<=NROFCOL;j++))
           do
             ((x_row_left=2))
@@ -149,9 +178,9 @@ typeset -i _counter_params=$#
             eval "x_row_size=\${COL${j}_ROW_${i}_SIZE}";  # get xrow size for xcolumn
             eval "x_col_max=\${COL${j}_NR_FULL}";
             ((x_row_right=x_col_max-x_row_size-x_row_left)) # get right side content space
-            numtochar "$x_row_left" " "
+            numtochar_ "$x_row_left" " "
             x_row_left=$x_chars
-            numtochar "$x_row_right" " "
+            numtochar_ "$x_row_right" " "
             Layout_Line_Row+="${x_row_left}${x_row_name}${x_chars}${outer_column_seperator}"
           done
         eval "ROW_${i}_STYLE=\"$Layout_Line_Row\"";
@@ -159,9 +188,9 @@ typeset -i _counter_params=$#
         done
         #
         if ((width_resize<150 )); then ((width_resize=150)); fi # sets min resize-size
-        _resize "50" "$width_resize"
+        resize_ "50" "$width_resize"
         ###==> FINAL Printing Part
-        printf "\n$Layout_Line_Full"
+        printf "$Layout_Line_Full"
         printf "\n$Layout_Line_Header"
         printf "$Layout_Line_Full"
         for ((i=1;i<=NROFROW;i++))
@@ -178,9 +207,20 @@ typeset -i _counter_params=$#
     *)
       ;;
   esac
-    }
+}
   #
-  numtochar(){
+  xfaktordash_(){
+    typeset faktor=${1}
+    typeset x_length=0
+    for ((i=0;i<faktor;i++))
+    do
+       printf "${MID_INNER_DASH}"
+       ((x_length++))
+    done
+
+  return 0
+}
+  numtochar_(){
     typeset -i sum=${1}
     typeset char=$2
     typeset x_chars=""
@@ -191,8 +231,8 @@ typeset -i _counter_params=$#
     done
 
     return 0
-  }
-  _resize(){
+}
+  resize_(){
     typeset height="$1"
     typeset width="$2" 
     typeset sequence
@@ -202,6 +242,7 @@ typeset -i _counter_params=$#
 
     return 0
 }
+#
 #   ------ Exception Handeling ------   #
   exception(){
     _errorlvl=${1}
@@ -225,12 +266,14 @@ typeset -i _counter_params=$#
         ;;
     esac
 }
-  #
+#
 ### ==> MAIN
 
 ###--> Usage:
-Design_Table "COLUMN" "Column1" "Column2" "Column3" "Column4"
-Design_Table "ROW" "ROW1" "ROW2" "ROW3" "ROW4"
-Design_Table "ROW" "ROW5" "ROW6" "ROW7" "ROW8"
-Design_Table "ROW" "ROW9" "ROW10" "ROW11" "ROW12"
+
+Design_Start
+Design_Table "COLUMN" "ColumnHead1" "ColumnHead2" "ColumnHead3" "ColumnHead4"
+Design_Table "ROW" "Row1Col1" "Row1Col2" "Row1Col3" "Row1Col4"
+Design_Table "ROW" "Row2Col1" "Row2Col2" "Row2Col3" "Row2Col4"
 Design_Table "PRINT"
+Design_End
