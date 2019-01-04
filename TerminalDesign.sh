@@ -1,17 +1,18 @@
 #!/bin/ksh
 
-#***# Design Variables #***#
-
-LEFT_OUTER_CORNER_U="\u250F"      # --> ┏ 
+LEFT_OUTER_CORNER_U="\u250F"      # --> ┏
 LEFT_OUTER_CORNER_D="\u2517"
-LEFT_OUTER_VERT_LINE="\u2503"     # --> ┃ 
-LEFT_OUTER_MID_LINE="\u2523"      # --> ┣ 
+LEFT_OUTER_VERT_LINE="\u2503"     # --> ┃
+LEFT_OUTER_MID_LINE="\u2523"      # --> ┣
 
 MID_INNER_DASH="\u2501"           # --> ━
 MID_INNER_ODASH="\u2919"          # --> ⤙
 
-RIGHT_INNER_BLOCK="\u25A7"        # --> ▨ 
-RIGHT_INNER_CIRC="\u29BF"         # --> ⦿ 
+RIGHT_INNER_BLOCK="\u25A7"        # --> ▨
+RIGHT_INNER_CIRC="\u29BF"         # --> ⦿
+
+
+#   ------ Procedure's ------   #
 
   Design_Start(){
 #
@@ -21,10 +22,20 @@ RIGHT_INNER_CIRC="\u29BF"         # --> ⦿
   return 0
 }
 
-  Design_End(){
+  Design_Command(){
 #
-  printf " ${LEFT_OUTER_VERT_LINE}"  # --> |
-  printf "\n ${LEFT_OUTER_CORNER_D}${RIGHT_INNER_BLOCK}\n"  # --> ▨
+typeset -i faktor=${1}    # faktor of mid delim dashes
+typeset msg="${2}"        # message
+typeset descr="${3}"      # descr after read
+typeset command="${4}"    # command 2b executed
+typeset -i x_length=0     # calcs nr of cursor moves
+  x_length=${#msg}+8+$faktor
+
+  printf "\n ${LEFT_OUTER_MID_LINE}${MID_INNER_DASH}"
+  xfaktordash_ "$faktor"
+  printf "${MID_INNER_DASH}${MID_INNER_ODASH} ${RIGHT_INNER_CIRC} $msg"
+  printf "\n ${LEFT_OUTER_VERT_LINE}\t\t $descr \033[A\r\033[${x_length}C" # returns (via ansi esc-seq) to previous row and move cursor
+  $command;
 
   return 0
 }
@@ -50,7 +61,7 @@ typeset -i MAXOFCOL
 #
 typeset -i _counter=0
 typeset -i _counter_params=$#
-# 
+#
   case $mode in
     COLUMN|Column|column)
       #
@@ -69,7 +80,7 @@ typeset -i _counter_params=$#
         do
           eval "typeset x_in=\${$i}"; # returns input param to var
           #
-          typeset x_head_content=${x_in} 
+          typeset x_head_content=${x_in}
           typeset x_head_size=${#x_in}
           ((x_width=x_head_size))
           #
@@ -100,7 +111,7 @@ typeset -i _counter_params=$#
           eval "typeset x_in=\${$i}"; # returns input param to var
           #
           typeset x_row_content=${x_in}
-          typeset x_row_size=${#x_in} 
+          typeset x_row_size=${#x_in}
           ((x_width=x_row_size))
           printf "\nCOL${_counter}_ROW_${NROFROW}_NAME=\"$x_row_content\"">>$temp_file_vars_name
           printf "\nCOL${_counter}_ROW_${NROFROW}_SIZE=\"$x_width\"">>$temp_file_vars_name
@@ -142,7 +153,7 @@ typeset -i _counter_params=$#
           for ((j=1;j<=NROFROW;j++))
           do
             eval "x_row_size=\${COL${i}_ROW_${j}_SIZE}";  # get xrow size for xcolumn
-            if ((x_row_size > temp_max_size)); then 
+            if ((x_row_size > temp_max_size)); then
               ((temp_max_size=x_row_size))  # get max size from all rows
             fi
           done
@@ -208,14 +219,21 @@ typeset -i _counter_params=$#
       ;;
   esac
 }
-  #
+  Design_End(){
+#
+  printf " ${LEFT_OUTER_VERT_LINE}"  # --> |
+  printf "\n ${LEFT_OUTER_CORNER_D}${RIGHT_INNER_BLOCK}\n"  # --> ▨
+
+  return 0
+}
+
+#### Internal
+
   xfaktordash_(){
     typeset faktor=${1}
-    typeset x_length=0
     for ((i=0;i<faktor;i++))
     do
        printf "${MID_INNER_DASH}"
-       ((x_length++))
     done
 
   return 0
@@ -234,7 +252,7 @@ typeset -i _counter_params=$#
 }
   resize_(){
     typeset height="$1"
-    typeset width="$2" 
+    typeset width="$2"
     typeset sequence
     #
     eval "sequence='\033[8;$1;$2t'";
@@ -269,9 +287,8 @@ typeset -i _counter_params=$#
 #
 ### ==> MAIN
 
-###--> Usage:
-
 Design_Start
+Design_Command "20" "Message: " "(e.g example)" "read test1"
 Design_Table "COLUMN" "ColumnHead1" "ColumnHead2" "ColumnHead3" "ColumnHead4"
 Design_Table "ROW" "Row1Col1" "Row1Col2" "Row1Col3" "Row1Col4"
 Design_Table "ROW" "Row2Col1" "Row2Col2" "Row2Col3" "Row2Col4"
