@@ -8,6 +8,9 @@ contains dynamic/customizable design procedures for continuous flow structure an
 ## Start
 Procedure prints starting point of structure
 
+## Command
+Procedure prints aligned messages including descpriton underneath the command tb executed.
+
 ## Table
 Procedure prints out columns & rows with automatic content size adaption and perfect alignment.
 
@@ -21,6 +24,10 @@ Procedure prints ending point of structure
 #### Start
 ```shell
 Design_Start   # Start
+```
+#### Command
+```shell
+Design_Command "20" "Message: " "(e.g example)" "read test1"   # 20xdelim / Text / lower Description / Command  
 ```
 
 #### Table
@@ -45,9 +52,10 @@ Design_End   # End
 
 ## Example Output:
 
-![](https://i.imgur.com/JfjZHpF.png)
+![](https://i.imgur.com/oqbGWqH.png)
 ```shell
 Design_Start
+Design_Command "20" "Message: " "(e.g example)" "read test1"
 Design_Table "COLUMN" "ColumnHead1" "ColumnHead2" "ColumnHead3" "ColumnHead4"
 Design_Table "ROW" "Row1Col1" "Row1Col2" "Row1Col3" "Row1Col4"
 Design_Table "ROW" "Row2Col1" "Row2Col2" "Row2Col3" "Row2Col4"
