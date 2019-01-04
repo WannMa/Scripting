@@ -26,6 +26,10 @@ Procedure prints ending point of structure
 Design_Start   # Start
 ```
 #### Command
+1. First Parameter indicates the number of universal delimeters to the right
+2. Second can hold a Message bevore the command
+3. Third can hold a Description beneath the to be executed command
+4. Fourth holds the command
 ```shell
 Design_Command "20" "Message: " "(e.g example)" "read test1"   # 20xdelim / Text / lower Description / Command  
 ```
