@@ -1,15 +1,19 @@
 #!/bin/ksh
 
-LEFT_OUTER_CORNER_U="\u250F"      # --> ┏
+LEFT_OUTER_CORNER_U="\u250F"      # --> ┏ 
 LEFT_OUTER_CORNER_D="\u2517"
-LEFT_OUTER_VERT_LINE="\u2503"     # --> ┃
-LEFT_OUTER_MID_LINE="\u2523"      # --> ┣
+LEFT_OUTER_VERT_LINE="\u2503"     # --> ┃ 
+LEFT_OUTER_MID_LINE="\u2523"      # --> ┣ 
 
 MID_INNER_DASH="\u2501"           # --> ━
 MID_INNER_ODASH="\u2919"          # --> ⤙
+MID_INNER_CDASH="\u257C"          # --> ╼
 
-RIGHT_INNER_BLOCK="\u25A7"        # --> ▨
-RIGHT_INNER_CIRC="\u29BF"         # --> ⦿
+RIGHT_INNER_BLOCK="\u25A7"        # --> ▨ 
+RIGHT_INNER_BLOCKW="\u2B1C"       # --> ⬜
+RIGHT_INNER_CIRC="\u29BF"         # --> ⦿ 
+RIGHT_INNER_ARROW="\u2192"        # --> →
+
 
 
 #   ------ Procedure's ------   #
@@ -21,25 +25,24 @@ RIGHT_INNER_CIRC="\u29BF"         # --> ⦿
 
   return 0
 }
-
   Design_Command(){
 #
 typeset -i faktor=${1}    # faktor of mid delim dashes
-typeset msg="${2}"        # message
+typeset msg="${2}"        # message 
 typeset descr="${3}"      # descr after read
 typeset command="${4}"    # command 2b executed
 typeset -i x_length=0     # calcs nr of cursor moves
   x_length=${#msg}+8+$faktor
 
   printf "\n ${LEFT_OUTER_MID_LINE}${MID_INNER_DASH}"
-  xfaktordash_ "$faktor"
+  xfaktorchar_ "$faktor" "${MID_INNER_DASH}"
   printf "${MID_INNER_DASH}${MID_INNER_ODASH} ${RIGHT_INNER_CIRC} $msg"
-  printf "\n ${LEFT_OUTER_VERT_LINE}\t\t $descr \033[A\r\033[${x_length}C" # returns (via ansi esc-seq) to previous row and move cursor
+  printf "\n ${LEFT_OUTER_VERT_LINE}\t\t $descr \033[A\r\033[${x_length}C" # returns (via ansi esc-seq) to previous row and move cursor 
   $command;
+  Design_Line "1"
 
   return 0
 }
-
   Design_Table(){
 #
 #***#   Display Parameters    #***#
@@ -61,7 +64,7 @@ typeset -i MAXOFCOL
 #
 typeset -i _counter=0
 typeset -i _counter_params=$#
-#
+# 
   case $mode in
     COLUMN|Column|column)
       #
@@ -80,7 +83,7 @@ typeset -i _counter_params=$#
         do
           eval "typeset x_in=\${$i}"; # returns input param to var
           #
-          typeset x_head_content=${x_in}
+          typeset x_head_content=${x_in} 
           typeset x_head_size=${#x_in}
           ((x_width=x_head_size))
           #
@@ -111,7 +114,7 @@ typeset -i _counter_params=$#
           eval "typeset x_in=\${$i}"; # returns input param to var
           #
           typeset x_row_content=${x_in}
-          typeset x_row_size=${#x_in}
+          typeset x_row_size=${#x_in} 
           ((x_width=x_row_size))
           printf "\nCOL${_counter}_ROW_${NROFROW}_NAME=\"$x_row_content\"">>$temp_file_vars_name
           printf "\nCOL${_counter}_ROW_${NROFROW}_SIZE=\"$x_width\"">>$temp_file_vars_name
@@ -130,7 +133,7 @@ typeset -i _counter_params=$#
         #
         typeset -i width_resize=4
         typeset terminalfull
-        typeset Layout_Line_Full="\n ${LEFT_OUTER_VERT_LINE} $inner_column_seperator" #result full line
+        typeset Layout_Line_Full=" ${LEFT_OUTER_VERT_LINE} $inner_column_seperator" #result full line
         typeset Layout_Line_Header=" ${LEFT_OUTER_VERT_LINE} $outer_column_seperator" # result header line
         typeset Layout_Line_Row=""  # result Row line
         #
@@ -153,7 +156,7 @@ typeset -i _counter_params=$#
           for ((j=1;j<=NROFROW;j++))
           do
             eval "x_row_size=\${COL${i}_ROW_${j}_SIZE}";  # get xrow size for xcolumn
-            if ((x_row_size > temp_max_size)); then
+            if ((x_row_size > temp_max_size)); then 
               ((temp_max_size=x_row_size))  # get max size from all rows
             fi
           done
@@ -201,16 +204,16 @@ typeset -i _counter_params=$#
         if ((width_resize<150 )); then ((width_resize=150)); fi # sets min resize-size
         resize_ "50" "$width_resize"
         ###==> FINAL Printing Part
-        printf "$Layout_Line_Full"
+        printf "\n$Layout_Line_Full"
         printf "\n$Layout_Line_Header"
-        printf "$Layout_Line_Full"
+        printf "\n$Layout_Line_Full"
         for ((i=1;i<=NROFROW;i++))
         do
           eval "Layout_Line_Row=\${ROW_${i}_STYLE}";
           printf "$Layout_Line_Row"
-          printf "$Layout_Line_Full"
+          printf "\n$Layout_Line_Full"
         done
-        printf "\n"
+        #printf "\n"
         #
         rm "$temp_file_vars_name"
       #
@@ -218,22 +221,59 @@ typeset -i _counter_params=$#
     *)
       ;;
   esac
+  
+  return 0
+}
+  Design_Block(){
+#
+    typeset -i faktor=${1}    # faktor of mid delim dashes
+    typeset descr=${2}        # description before block
+    typeset msg=${3}          # message after block
+    #
+    printf "\n ${LEFT_OUTER_VERT_LINE}"
+    xfaktorchar_ "$faktor" "$MID_INNER_DASH"
+    printf "${MID_INNER_CDASH}${MID_INNER_DASH}$descr${RIGHT_INNER_BLOCKW} $msg"
+                
+  return 0
+}
+  Design_Arrow(){
+#
+    typeset -i faktor=${1}    # faktor of mid delim dashes
+    typeset descr=${2}        # description before block
+    typeset msg=${3}          # message after block
+    #
+    printf "\n ${LEFT_OUTER_VERT_LINE}"
+    xfaktorchar_ "$faktor" "$MID_INNER_DASH"
+    printf "${MID_INNER_CDASH}${MID_INNER_DASH}$descr${RIGHT_INNER_BLOCKW} $msg"
+    printf "${MID_INNER_DASH}${sec_colour}${MID_INNER_DASH}$descr_ ${RIGHT_INNER_ARROW} $msg_"
+
+  return 0
+}
+  Design_Line(){
+#
+    typeset -i faktor=${1}    # faktor of mid delim dashes
+    #
+    xfaktorchar_ "$faktor" "\n $LEFT_OUTER_VERT_LINE"
+
+  return 0
 }
   Design_End(){
 #
-  printf " ${LEFT_OUTER_VERT_LINE}"  # --> |
-  printf "\n ${LEFT_OUTER_CORNER_D}${RIGHT_INNER_BLOCK}\n"  # --> ▨
+    printf "\n ${LEFT_OUTER_VERT_LINE}"  # --> |
+    printf "\n ${LEFT_OUTER_CORNER_D}${RIGHT_INNER_BLOCK}"  # --> ▨
 
   return 0
 }
 
 #### Internal
 
-  xfaktordash_(){
+  xfaktorchar_(){
     typeset faktor=${1}
+    typeset char=${2}
     for ((i=0;i<faktor;i++))
     do
-       printf "${MID_INNER_DASH}"
+      #if [[ $char=$LEFT_OUTER_VERT_LINE ]] && [[ $i<$faktor ]]; then char+=" \n" echo "DONE"; fi
+       printf "${char}"
     done
 
   return 0
@@ -252,11 +292,11 @@ typeset -i _counter_params=$#
 }
   resize_(){
     typeset height="$1"
-    typeset width="$2"
+    typeset width="$2" 
     typeset sequence
     #
     eval "sequence='\033[8;$1;$2t'";
-    printf "$sequence" # == > adapt screen size
+    printf "$sequence" # == > adapt screen size to max width
 
     return 0
 }
@@ -288,9 +328,12 @@ typeset -i _counter_params=$#
 ### ==> MAIN
 
 Design_Start
-Design_Command "20" "Message: " "(e.g example)" "read test1"
+Design_Line "1"
+Design_Block "3" " Text " "Block"
+Design_Line "2"
 Design_Table "COLUMN" "ColumnHead1" "ColumnHead2" "ColumnHead3" "ColumnHead4"
 Design_Table "ROW" "Row1Col1" "Row1Col2" "Row1Col3" "Row1Col4"
 Design_Table "ROW" "Row2Col1" "Row2Col2" "Row2Col3" "Row2Col4"
 Design_Table "PRINT"
+Design_Command "20" "Message: " "(e.g example)" "read test1"
 Design_End
