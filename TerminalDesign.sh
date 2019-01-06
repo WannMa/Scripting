@@ -244,8 +244,7 @@ typeset -i _counter_params=$#
     #
     printf "\n ${LEFT_OUTER_VERT_LINE}"
     xfaktorchar_ "$faktor" "$MID_INNER_DASH"
-    printf "${MID_INNER_CDASH}${MID_INNER_DASH}$descr${RIGHT_INNER_BLOCKW} $msg"
-    printf "${MID_INNER_DASH}${sec_colour}${MID_INNER_DASH}$descr_ ${RIGHT_INNER_ARROW} $msg_"
+    printf "${MID_INNER_DASH}${MID_INNER_DASH}$descr ${RIGHT_INNER_ARROW} $msg"
 
   return 0
 }
@@ -336,4 +335,5 @@ Design_Table "ROW" "Row1Col1" "Row1Col2" "Row1Col3" "Row1Col4"
 Design_Table "ROW" "Row2Col1" "Row2Col2" "Row2Col3" "Row2Col4"
 Design_Table "PRINT"
 Design_Command "20" "Message: " "(e.g example)" "read test1"
+Design_Arrow "3" " Input" "Test"
 Design_End
