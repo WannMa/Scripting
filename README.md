@@ -1,12 +1,12 @@
 # Terminal Design Procedures
 
-contains dynamic/customizable design procedures for continuous flow structure and consistent alignment.
+contains dynamic/customizable design procedures for continuous flow structure and consistent alignment for Output of Data.
 
 +Improves readability 🔖 | +satisfies obsessive organizers 🤣
 ------------ | ------------ | 
 
 ## Start
-Procedure prints starting point of structure
+Procedure prints starting point of structure.
 
 ## Command
 Procedure prints aligned messages including descpriton underneath the command tb executed.
@@ -15,10 +15,16 @@ Procedure prints aligned messages including descpriton underneath the command tb
 Procedure prints out columns & rows with automatic content size adaption and perfect alignment.
 
 ## Block
-Procedure prints a literal Block with possible before and after text
+Procedure prints a literal Block with possible before and after text.
+
+## Arrow
+Procedure prints a literal Arrow with possible before and after text.
+
+## Line
+Procedure prints vertical delimeters.
 
 ## End
-Procedure prints ending point of structure
+Procedure prints ending point of structure.
 
 ---
 
